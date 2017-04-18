@@ -69,7 +69,7 @@ You should now have a folder on your device with the respective Webdriver for ea
 ## Configuration
 
 * In Microsoft Edge, go to settings, "View advanced settings", then turn "Block pop-ups" to off. This is required in order for BrowserEfficiencyTest to open new tabs in Microsoft Edge.
-* Under \BrowserEfficiencyTest\BrowserEfficiencyTest\bin\Debug, you'll see the JSON file `credentials.json`. You will have to provide credentials for any scenarios that require them. No test accounts/credentials are provided as part of this repo. The standard workloads require some credentials to be provided by you. `representativelong` and `representativeshort` require that you provide log in credentials for Facebook, Pinterest, and Gmail (and the Gmail account must have at least 5 emails in the inbox). `heavymultitab` requires credentials for Facebook and Gmail.
+* Under \BrowserEfficiencyTest\BrowserEfficiencyTest\bin\Debug, you'll see the JSON file `credentials.json`. You will have to provide credentials for any scenarios that require them. No test accounts/credentials are provided as part of this repo. The standard workloads require some credentials to be provided by you. `representative` require that you provide log in credentials for Facebook, Pinterest, and Gmail (and the Gmail account must have at least 5 emails in the inbox). `heavymultitab` requires credentials for Facebook and Gmail.
 * In [Usage](Usage.md), each scenario specifies if it needs credentials to run. 
 
 ### Recommendations to reduce variability
@@ -92,7 +92,9 @@ The items in this section are not required, but they are useful recommendations 
 
 ## Run the test
 
-### Start Elevator
+### Start Elevator first
+
+> This step is only necessary if you're using tracing for any of your measures. This is the case if you're providing the "-ms" or "-measureset" flag in the next step. Both the examples below do require this.
 
 * Run Elevator by going to the its folder, then within it, navigating to \ElevatorServer\bin\Debug\ElevatorServer.exe (assuming you built for Debug).
 * Accept the UAC prompt
@@ -106,18 +108,21 @@ The items in this section are not required, but they are useful recommendations 
 
 #### Fast test run
 
-To ensure your configuration and build is correct, here's a good test to run. It will run through each browser twice, using two quick scenarios in two different tabs, and record how much CPU was used for them:
+To ensure your configuration and build is correct, here's a good test to run. It will run through two browsers twice each, using two quick scenarios in two different tabs, and record how much CPU was used for them:
 
-You'll have to provide a path to place the resulting traces after the `-tc` command. Remember that this also assumes Elevator is already running and waiting for a client connection.
+You can optionally provide a path to place the resulting traces using the '-rp' command. Remember that this also assumes Elevator is already running and waiting for a client connection.
 
 ```
-> BrowserEfficiencyTest.exe -b edge chrome opera firefox -i 2 -tc C:\Some\Path\TestTraces -ms cpuUsage -s fastScenario wikipedia
+> BrowserEfficiencyTest.exe -b edge chrome -i 2 -rp C:\Some\Path\TestTraces -ms cpuUsage -s FastScenario WikipediaUnitedStates
 ```
 
 #### Full test run
 
-To get a full 5 iterations on each browser running a default set of scenarios, use a workload instead of individual scenarios. These workloads are defined in `workloads.json`.
+To get a full 5 iterations on each browser running a default set of scenarios, use a workload instead of individual scenarios. These workloads are defined in `workloads.json`. This configuration will also record page load times for the scenarios that specify it.
 
 ```
-> BrowserEfficiencyTest.exe -b edge chrome opera firefox -i 5 -tc C:\Some\Path\TestTraces -ms cpuUsage -w representativeshort
+> BrowserEfficiencyTest.exe -b edge chrome -i 5 -rp C:\Some\Path\TestTraces -ms cpuUsage -w representative -r
 ```
+### See results
+
+Go to the path you specified after `-rp` (results path). You should now see a number of traces equal to the number of browsers * the number of iterations * the number of measure sets provided. You should also see a CSV file with all the results in it. The CSV will include results from all of those traces in one convenient place.

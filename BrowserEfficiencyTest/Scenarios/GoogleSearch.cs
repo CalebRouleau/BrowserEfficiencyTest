@@ -36,13 +36,13 @@ namespace BrowserEfficiencyTest
     {
         public GoogleSearch()
         {
-            Name = "google";
+            Name = "GoogleSearch";
             // Default time
         }
 
-        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager)
+        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
-            driver.Navigate().GoToUrl("http://www.google.com");
+            driver.NavigateToUrl("http://www.google.com");
             driver.Wait(5);
 
             // Search for "Seattle" and hit enter

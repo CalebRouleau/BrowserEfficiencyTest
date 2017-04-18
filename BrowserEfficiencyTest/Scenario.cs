@@ -26,7 +26,10 @@
 //--------------------------------------------------------------
 
 using OpenQA.Selenium.Remote;
+using OpenQA.Selenium;
+using System;
 using System.Collections.Generic;
+using OpenQA.Selenium.Support.UI;
 
 namespace BrowserEfficiencyTest
 {
@@ -39,6 +42,6 @@ namespace BrowserEfficiencyTest
         public int DefaultDuration { get; set; } = 40;
 
         // Override this function with the "stuff" to do in the scenario
-        public abstract void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager);
+        public abstract void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer);
     }
 }

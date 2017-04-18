@@ -31,23 +31,34 @@ namespace BrowserEfficiencyTest
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        private static int Main(string[] args)
         {
-            Arguments arguments = new Arguments(args);
+            int returnValue = 0;
 
-            if (arguments.Browsers.Count > 0 && arguments.Scenarios.Count > 0)
+            Arguments arguments = new Arguments(args);
+            if (arguments.ArgumentsAreValid)
             {
                 ScenarioRunner scenarioRunner = new ScenarioRunner(arguments);
 
-                scenarioRunner.Run();
-            }
+                // Run the automation. This will write traces to the current or provided directory if the user requested it
+                if (arguments.Browsers.Count > 0 && arguments.Scenarios.Count > 0)
+                {
+                    scenarioRunner.Run();
+                }
 
-            if (arguments.UsingTraceController && arguments.DoPostProcessing)
+                // If traces have been written, process them into a csv of results
+                // Only necessary if we're tracing and/or measuring responsiveness
+                if ((arguments.UsingTraceController && arguments.DoPostProcessing) || arguments.MeasureResponsiveness)
+                {
+                    PerfProcessor perfProcessor = new PerfProcessor((arguments.SelectedMeasureSets).ToList());
+                    perfProcessor.Execute(arguments.EtlPath, arguments.EtlPath, scenarioRunner.GetResponsivenessResults());
+                }
+            }
+            else
             {
-                PerfProcessor perfProcessor = new PerfProcessor((arguments.SelectedMeasureSets).ToList());
-
-                perfProcessor.Execute(arguments.EtlPath, arguments.EtlPath);
+                returnValue = 1;
             }
+            return returnValue;
         }
     }
 }

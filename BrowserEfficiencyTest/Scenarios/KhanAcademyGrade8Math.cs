@@ -25,36 +25,44 @@
 //
 //--------------------------------------------------------------
 
-using System.Collections.Generic;
 using OpenQA.Selenium.Remote;
 using OpenQA.Selenium;
 
 namespace BrowserEfficiencyTest
 {
-    internal class OfficeLauncher : Scenario
+    internal class KhanAcademyGrade8Math : Scenario
     {
-        public OfficeLauncher()
+        public KhanAcademyGrade8Math()
         {
-            Name = "OfficeLauncher";
+            Name = "KhanAcademyGrade8Math";
+            DefaultDuration = 90;
         }
 
         public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
-            UserInfo credentials = credentialManager.GetCredentials("office.com");
-
-            // Navigate
-            driver.NavigateToUrl("http://www.office.com");
+            // Go to Khan Academy
+            driver.NavigateToUrl("http://www.khanacademy.org");
             driver.Wait(5);
 
-            // Click on "Sign In" button
-            driver.ClickElement(driver.FindElementByLinkText("Sign in"));
-            driver.Wait(2);
+            driver.ScrollPage(1);
 
-            // Log in
-            driver.TypeIntoField(driver.FindElementById("cred_userid_inputtext"), credentials.Username + Keys.Tab);
-            driver.Wait(8);
-            driver.TypeIntoField(driver.FindElementByName("passwd"), credentials.Password + Keys.Enter);
+            // Go to 8th grade math
+            driver.NavigateToUrl("https://www.khanacademy.org/math/cc-eighth-grade-math");
             driver.Wait(5);
+
+            // Click on the section on repeating decimals
+            driver.ClickElement(driver.FindElement(By.XPath("//*[contains(text(), 'Repeating decimals')]")));
+            driver.Wait(5);
+
+            // Get the element with the text "Converting a fraction...", but click on its grandparent, because the grandparent
+            // is the anchor
+            driver.ClickElement(driver.FindElement(By.XPath("//*[contains(text(), 'Converting a fraction to a repeating decimal')]"))
+                .FindElement(By.XPath(".."))    // ...These two lines each go up to the parent element
+                .FindElement(By.XPath("..")));
+
+            // Watch the movie for 30s, then go back.
+            driver.Wait(30);
+            driver.NavigateBack();
         }
     }
 }

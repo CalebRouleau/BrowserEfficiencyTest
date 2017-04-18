@@ -37,14 +37,14 @@ namespace BrowserEfficiencyTest
     {
         public InstagramNYPL()
         {
-            Name = "instagram";
+            Name = "InstagramNYPL";
             DefaultDuration = 60;
         }
 
-        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager)
+        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
             // Nagivate to the Instagram page for the NY public library
-            driver.Navigate().GoToUrl("https://www.instagram.com/nypl/");
+            driver.NavigateToUrl("https://www.instagram.com/nypl/");
             driver.Wait(5);
 
             driver.ScrollPage(2);
@@ -55,6 +55,8 @@ namespace BrowserEfficiencyTest
 
             // Then scroll through it
             driver.ScrollPage(8);
+
+            timer.ExtractPageLoadTime("Instagram account");
         }
     }
 }

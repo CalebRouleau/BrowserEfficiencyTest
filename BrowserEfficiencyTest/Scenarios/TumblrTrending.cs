@@ -37,14 +37,14 @@ namespace BrowserEfficiencyTest
     {
         public TumblrTrending()
         {
-            Name = "tumblr";
+            Name = "TumblrTrending";
             DefaultDuration = 60;
         }
 
-        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager)
+        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
             // Nagivate to the homepage for Tumblr
-            driver.Navigate().GoToUrl("https://www.tumblr.com/explore/trending");
+            driver.NavigateToUrl("https://www.tumblr.com/explore/trending");
             driver.Wait(10);
 
             // Try changing content with content controls

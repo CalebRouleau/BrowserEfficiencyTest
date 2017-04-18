@@ -37,24 +37,19 @@ namespace BrowserEfficiencyTest
         public WikipediaUnitedStates()
         {
             // Specifify name and that it's 30s
-            Name = "wikipedia";
+            Name = "WikipediaUnitedStates";
             DefaultDuration = 30;
         }
-        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager)
+        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
-            // Nagivate to wikipedia
-            driver.Navigate().GoToUrl("https://en.wikipedia.org/wiki/United_States");
-
+            // Nagivate to Wikipedia/United_States
+            driver.NavigateToUrl("https://en.wikipedia.org/wiki/United_States");
             driver.Wait(5);
-
-            if (browser == "firefox")
-            {
-                // With Firefox, we had to get focus onto the page, or else PgDn scrolled through the address bar
-                driver.FindElementById("firstHeading").SendKeys(string.Empty);
-            }
 
             // Scroll a bit
             driver.ScrollPage(12);
+
+            timer.ExtractPageLoadTime("Wikipedia article");
         }
     }
 }

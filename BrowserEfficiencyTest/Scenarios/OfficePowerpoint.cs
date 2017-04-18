@@ -35,16 +35,16 @@ namespace BrowserEfficiencyTest
     {
         public OfficePowerpoint()
         {
-            Name = "powerpoint";
+            Name = "OfficePowerpoint";
             DefaultDuration = 60;
         }
 
-        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager)
+        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
             UserInfo credentials = credentialManager.GetCredentials("office.com");
 
             // Navigate
-            driver.Navigate().GoToUrl("https://outlook.live.com/owa/?nlp=1");
+            driver.NavigateToUrl("https://outlook.live.com/owa/?nlp=1");
             driver.Wait(5);
 
             // Log in

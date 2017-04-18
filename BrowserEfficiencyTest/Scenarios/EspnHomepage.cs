@@ -37,18 +37,20 @@ namespace BrowserEfficiencyTest
     {
         public EspnHomepage()
         {
-            Name = "espn";
+            Name = "EspnHomepage";
             DefaultDuration = 75;
         }
 
-        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager)
+        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
             // Nagivate to espn
-            driver.Navigate().GoToUrl("http://www.espn.com");
+            driver.NavigateToUrl("http://www.espn.com");
             driver.Wait(10);
 
             // Scroll through the infinite list
             driver.ScrollPage(20);
+
+            timer.ExtractPageLoadTime("ESPN homepage");
         }
     }
 }

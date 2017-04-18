@@ -25,36 +25,37 @@
 //
 //--------------------------------------------------------------
 
-using System.Collections.Generic;
 using OpenQA.Selenium.Remote;
 using OpenQA.Selenium;
 
 namespace BrowserEfficiencyTest
 {
-    internal class OfficeLauncher : Scenario
+    internal class GooglePrimeFactorization : Scenario
     {
-        public OfficeLauncher()
+        public GooglePrimeFactorization()
         {
-            Name = "OfficeLauncher";
+            Name = "GooglePrimeFactorization";
+            // Default time
         }
 
         public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
-            UserInfo credentials = credentialManager.GetCredentials("office.com");
-
-            // Navigate
-            driver.NavigateToUrl("http://www.office.com");
+            driver.NavigateToUrl("http://www.google.com");
             driver.Wait(5);
 
-            // Click on "Sign In" button
-            driver.ClickElement(driver.FindElementByLinkText("Sign in"));
-            driver.Wait(2);
-
-            // Log in
-            driver.TypeIntoField(driver.FindElementById("cred_userid_inputtext"), credentials.Username + Keys.Tab);
-            driver.Wait(8);
-            driver.TypeIntoField(driver.FindElementByName("passwd"), credentials.Password + Keys.Enter);
+            // Search for "prime factorization" and hit enter
+            driver.TypeIntoField(driver.FindElementByXPath("//*[@title='Search']"), "prime factorization" + Keys.Enter);
             driver.Wait(5);
+
+            // Click on the Prime Factorization box that comes up
+            driver.ClickElement(driver.FindElementByXPath("//*[contains(text(), 'Prime Factorization - Math is Fun')]"));
+
+            // Read through it
+            for (int i = 0; i < 3; i++)
+            {
+                driver.Wait(2);
+                driver.ScrollPage(1);
+            }
         }
     }
 }

@@ -37,16 +37,16 @@ namespace BrowserEfficiencyTest
     {
         public PinterestExplore()
         {
-            Name = "pinterest";
+            Name = "PinterestExplore";
             DefaultDuration = 60;
         }
 
-        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager)
+        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
             UserInfo credentials = credentialManager.GetCredentials("pinterest.com");
 
             // Nagivate to the Pintrest explore page
-            driver.Navigate().GoToUrl("https://www.pinterest.com/");
+            driver.NavigateToUrl("https://www.pinterest.com/");
             driver.Wait(5);
 
             // Log in

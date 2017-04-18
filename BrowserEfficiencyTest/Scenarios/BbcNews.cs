@@ -29,6 +29,8 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
 using System.Collections.Generic;
 using System.Threading;
+using System;
+
 
 namespace BrowserEfficiencyTest
 {
@@ -36,15 +38,17 @@ namespace BrowserEfficiencyTest
     {
         public BbcNews()
         {
-            Name = "bbcNews";
+            Name = "BbcNews";
             DefaultDuration = 60;
         }
 
-        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager)
+        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
             // Navigate
-            driver.Navigate().GoToUrl("http://www.bbc.com");
+            driver.NavigateToUrl("http://www.bbc.com");
             driver.Wait(10);
+
+            timer.ExtractPageLoadTime("BBC homepage");
 
             // Navigate to the hero headline
             driver.ClickElement(driver.FindElement(By.XPath("//*[@rev='hero1|headline']")));
@@ -54,6 +58,8 @@ namespace BrowserEfficiencyTest
             driver.ScrollPage(2);
             driver.Wait(2);
             driver.ScrollPage(2);
+
+            timer.ExtractPageLoadTime("BBC article");
         }
     }
 }

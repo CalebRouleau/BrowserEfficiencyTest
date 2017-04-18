@@ -37,14 +37,14 @@ namespace BrowserEfficiencyTest
     {
         public AmazonSearch()
         {
-            Name = "amazon";
+            Name = "AmazonSearch";
             DefaultDuration = 45;
         }
 
-        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager)
+        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
             // Navigate
-            driver.Navigate().GoToUrl("http://www.amazon.com");
+            driver.NavigateToUrl("https://www.amazon.com");
             driver.Wait(5);
 
             // Type "Game of Thrones" in the search box and hit enter

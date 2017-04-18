@@ -25,36 +25,42 @@
 //
 //--------------------------------------------------------------
 
-using System.Collections.Generic;
 using OpenQA.Selenium.Remote;
 using OpenQA.Selenium;
 
 namespace BrowserEfficiencyTest
 {
-    internal class OfficeLauncher : Scenario
+    internal class HistoryWWII : Scenario
     {
-        public OfficeLauncher()
+        public HistoryWWII()
         {
-            Name = "OfficeLauncher";
+            Name = "HistoryWWII";
+            DefaultDuration = 120;
         }
 
         public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
-            UserInfo credentials = credentialManager.GetCredentials("office.com");
-
-            // Navigate
-            driver.NavigateToUrl("http://www.office.com");
+            // Go to History.com topics
+            driver.NavigateToUrl("http://www.history.com/topics");
             driver.Wait(5);
 
-            // Click on "Sign In" button
-            driver.ClickElement(driver.FindElementByLinkText("Sign in"));
-            driver.Wait(2);
+            // Scroll to the bottom of the page
+            driver.ScrollPage(6);
 
-            // Log in
-            driver.TypeIntoField(driver.FindElementById("cred_userid_inputtext"), credentials.Username + Keys.Tab);
-            driver.Wait(8);
-            driver.TypeIntoField(driver.FindElementByName("passwd"), credentials.Password + Keys.Enter);
+            // Click on WWII to expand its sections
+            driver.ClickElement(driver.FindElementById("topicsAccordion")
+                .FindElement(By.XPath("//*[@href='#category_22']")));
+            driver.Wait(3);
+
+            // Go to the article on American Women in WWII
+            driver.ClickElement(driver.FindElement(By.XPath("//*[contains(text(), 'American Women in World War II')]")));
+            driver.WaitForPageLoad();
+            driver.Wait(20);
+
+            // And scroll through it
+            driver.ScrollPage(3);
             driver.Wait(5);
+            driver.NavigateBack();
         }
     }
 }

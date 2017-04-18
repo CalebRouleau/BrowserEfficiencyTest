@@ -41,13 +41,13 @@ namespace BrowserEfficiencyTest
     {
         public FastScenario()
         {
-            Name = "fastScenario";
+            Name = "FastScenario";
             DefaultDuration = 10;
         }
 
-        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager)
+        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
-            driver.Navigate().GoToUrl("http://www.google.com");
+            driver.NavigateToUrl("http://www.google.com");
         }
     }
 }

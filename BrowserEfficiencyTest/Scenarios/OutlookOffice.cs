@@ -35,16 +35,16 @@ namespace BrowserEfficiencyTest
     {
         public OutlookOffice()
         {
-            Name = "office";
+            Name = "OutlookOffice";
             DefaultDuration = 80;
         }
 
-        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager)
+        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
             UserInfo credentials = credentialManager.GetCredentials("outlook.com");
 
             // Navigate
-            driver.Navigate().GoToUrl("https://outlook.live.com/owa/?nlp=1");
+            driver.NavigateToUrl("https://outlook.live.com/owa/?nlp=1");
             driver.Wait(5);
 
             // Log in
@@ -60,7 +60,7 @@ namespace BrowserEfficiencyTest
             driver.Wait(8);
 
             // That opens up a new tab, so we have to give Webdriver focus in the new tab
-            driver.SwitchTo().Window(driver.WindowHandles[driver.WindowHandles.Count - 1]);
+            driver.SwitchTab(driver.WindowHandles[driver.WindowHandles.Count - 1]);
             driver.Wait(1);
 
             // Open up a Word doc

@@ -25,36 +25,35 @@
 //
 //--------------------------------------------------------------
 
-using System.Collections.Generic;
 using OpenQA.Selenium.Remote;
 using OpenQA.Selenium;
 
 namespace BrowserEfficiencyTest
 {
-    internal class OfficeLauncher : Scenario
+    internal class YoutubeTrigonometry : Scenario
     {
-        public OfficeLauncher()
+        public YoutubeTrigonometry()
         {
-            Name = "OfficeLauncher";
+            Name = "YoutubeTrigonometry";
+            DefaultDuration = 60;
         }
 
         public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
-            UserInfo credentials = credentialManager.GetCredentials("office.com");
-
-            // Navigate
-            driver.NavigateToUrl("http://www.office.com");
+            // Go to Youtube
+            driver.NavigateToUrl("http://www.youtube.com");
             driver.Wait(5);
 
-            // Click on "Sign In" button
-            driver.ClickElement(driver.FindElementByLinkText("Sign in"));
-            driver.Wait(2);
-
-            // Log in
-            driver.TypeIntoField(driver.FindElementById("cred_userid_inputtext"), credentials.Username + Keys.Tab);
-            driver.Wait(8);
-            driver.TypeIntoField(driver.FindElementByName("passwd"), credentials.Password + Keys.Enter);
+            // Search for Trigonometry
+            driver.TypeIntoField(driver.FindElementById("masthead-search-term"), "trigonometry" + Keys.Enter);
             driver.Wait(5);
+
+            // Click on the video result
+            driver.ClickElement(driver.FindElementByXPath("//*[@href='/watch?v=F21S9Wpi0y8']"));
+
+            // Watch for 30s, then pause
+            driver.Wait(30);
+            driver.ClickElement(driver.FindElementsByClassName("ytp-play-button")[0]);
         }
     }
 }

@@ -25,36 +25,42 @@
 //
 //--------------------------------------------------------------
 
-using System.Collections.Generic;
 using OpenQA.Selenium.Remote;
 using OpenQA.Selenium;
 
 namespace BrowserEfficiencyTest
 {
-    internal class OfficeLauncher : Scenario
+    internal class NewselaChineseNewYear : Scenario
     {
-        public OfficeLauncher()
+        public NewselaChineseNewYear()
         {
-            Name = "OfficeLauncher";
+            Name = "NewselaChineseNewYear";
+            DefaultDuration = 120;
         }
 
         public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
-            UserInfo credentials = credentialManager.GetCredentials("office.com");
-
-            // Navigate
-            driver.NavigateToUrl("http://www.office.com");
+            // Go to Newsela
+            driver.NavigateToUrl("http://www.newsela.com");
             driver.Wait(5);
 
-            // Click on "Sign In" button
-            driver.ClickElement(driver.FindElementByLinkText("Sign in"));
+            // Navigate to the library
+            driver.ClickElement(driver.FindElement(By.XPath("//*[@href='/articles/#/rule/latest-library']")));
+            driver.WaitForPageLoad();
+            driver.Wait(5);
+
+            // Search for "Chinese New Year"
+            driver.TypeIntoField(driver.FindElementById("inset-search").FindElement(By.TagName("input")), "chinese new year" + Keys.Enter);
+            driver.WaitForPageLoad();
             driver.Wait(2);
 
-            // Log in
-            driver.TypeIntoField(driver.FindElementById("cred_userid_inputtext"), credentials.Username + Keys.Tab);
-            driver.Wait(8);
-            driver.TypeIntoField(driver.FindElementByName("passwd"), credentials.Password + Keys.Enter);
-            driver.Wait(5);
+            // Go to the article
+            driver.ClickElement(driver.FindElementByXPath("//*[@href='/articles/lib-history-chinese-new-year/id/25129/']"));
+            driver.WaitForPageLoad();
+            driver.Wait(2);
+
+            // Sadly, we can't scroll far since we're not logged in
+            driver.ScrollPage(1);
         }
     }
 }

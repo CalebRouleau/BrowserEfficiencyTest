@@ -37,22 +37,16 @@ namespace BrowserEfficiencyTest
     {
         public GmailGoThroughEmails()
         {
-            Name = "gmail";
-            DefaultDuration = 80;
+            Name = "GmailGoThroughEmails";
+            DefaultDuration = 90;
         }
 
-        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager)
+        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
-            NavigateToGmail(driver);
+            driver.NavigateToUrl("https://accounts.google.com/ServiceLogin?service=mail&continue=https://mail.google.com/mail/#identifier");
             driver.Wait(2);
             LogIn(driver, credentialManager);
-            driver.Wait(7);
             BrowseEmails(driver, 5);
-        }
-
-        private void NavigateToGmail(RemoteWebDriver driver)
-        {
-            driver.Navigate().GoToUrl("https://accounts.google.com/ServiceLogin?service=mail&continue=https://mail.google.com/mail/#identifier");
         }
 
         private void LogIn(RemoteWebDriver driver, CredentialManager credentialManager)
@@ -63,27 +57,26 @@ namespace BrowserEfficiencyTest
             try
             {
                 // Enter username
-                driver.TypeIntoField(driver.FindElementById("Email"), credentials.Username);
-                driver.Wait(1);
-
-                // Tab down and hit next button
-                driver.Keyboard.SendKeys(Keys.Tab);
-                driver.Keyboard.SendKeys(Keys.Enter);
-
+                driver.TypeIntoField(driver.FindElementById("Email"), credentials.Username + Keys.Enter);
                 driver.Wait(1);
             }
-            catch (ElementNotVisibleException)
+            catch (ElementNotVisibleException) { }
+            catch (InvalidOperationException)
             {
                 // If using profiles, the Email element will not be found and user will be able to enter the password
             }
 
             // Enter password
-            driver.TypeIntoField(driver.FindElementById("Passwd"), credentials.Password);
+            driver.TypeIntoField(driver.FindElementById("Passwd"), credentials.Password + Keys.Enter);
 
-            // Tab down and hit submit button
-            driver.Keyboard.SendKeys(Keys.Tab);
-            driver.Wait(1);
-            driver.Keyboard.SendKeys(Keys.Enter);
+            // give the page some time to load
+            driver.Wait(14);
+
+            // Check the url to make sure login was successful
+            if(driver.Url != @"https://mail.google.com/mail/u/0/#inbox" && driver.Url != @"https://mail.google.com/mail/#inbox")
+            {
+                throw new Exception("Login to Gmail failed!");
+            }
         }
 
         private void BrowseEmails(RemoteWebDriver driver, int numOfEmailsToBrowse)
@@ -93,15 +86,15 @@ namespace BrowserEfficiencyTest
             {
                 // Simply using the shortcut keys worked pretty well.
                 // Note that they have to be enabled in the account you're using (gmail settings)
-                driver.Keyboard.SendKeys("o");
+                driver.SendKeys("o");
                 driver.Wait(4);
 
                 // Go back to inbox
-                driver.Keyboard.SendKeys("u");
+                driver.SendKeys("u");
                 driver.Wait(2);
                 
                 // Select next email with the "cursor". Do this with the j key in gmail
-                driver.Keyboard.SendKeys("j");
+                driver.SendKeys("j");
                 driver.Wait(2);
             }
         }

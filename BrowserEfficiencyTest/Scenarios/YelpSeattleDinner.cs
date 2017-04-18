@@ -37,14 +37,13 @@ namespace BrowserEfficiencyTest
     {
         public YelpSeattleDinner()
         {
-            Name = "yelp";
+            Name = "YelpSeattleDinner";
         }
 
-        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager)
+        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
             // Nagivate to Yelp (Seattle)
-            driver.Navigate().GoToUrl("http://yelp.com/seattle");
-
+            driver.NavigateToUrl("http://yelp.com/seattle");
             driver.Wait(5);
 
             // Search for dinner

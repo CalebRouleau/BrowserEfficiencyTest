@@ -25,36 +25,36 @@
 //
 //--------------------------------------------------------------
 
-using System.Collections.Generic;
 using OpenQA.Selenium.Remote;
 using OpenQA.Selenium;
 
 namespace BrowserEfficiencyTest
 {
-    internal class OfficeLauncher : Scenario
+    internal class ScholasticHarryPotter : Scenario
     {
-        public OfficeLauncher()
+        public ScholasticHarryPotter()
         {
-            Name = "OfficeLauncher";
+            Name = "ScholasticHarryPotter";
+            DefaultDuration = 60;
         }
 
         public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
-            UserInfo credentials = credentialManager.GetCredentials("office.com");
-
-            // Navigate
-            driver.NavigateToUrl("http://www.office.com");
+            // Go to Scholastic
+            driver.NavigateToUrl("http://www.scholastic.com");
             driver.Wait(5);
 
-            // Click on "Sign In" button
-            driver.ClickElement(driver.FindElementByLinkText("Sign in"));
-            driver.Wait(2);
+            // The dropdown nav does not play well with webdriver, so navigate to Harry Potter directly
+            driver.NavigateToUrl("http://harrypotter.scholastic.com/?esp=CORPHP/ib/////NAV/Kids/QLinks/STACKSHarryPotter////");
+            driver.Wait(10);
 
-            // Log in
-            driver.TypeIntoField(driver.FindElementById("cred_userid_inputtext"), credentials.Username + Keys.Tab);
-            driver.Wait(8);
-            driver.TypeIntoField(driver.FindElementByName("passwd"), credentials.Password + Keys.Enter);
+            // Go to the first book
+            driver.ClickElement(driver.FindElementById("home_nonflash").FindElement(By.XPath("//*[@href='/sorcerers_stone/']")));
+            driver.WaitForPageLoad();
             driver.Wait(5);
+
+            // Then scroll down
+            driver.ScrollPage(2);
         }
     }
 }

@@ -37,14 +37,14 @@ namespace BrowserEfficiencyTest
     {
         public TwitterPublic()
         {
-            Name = "twitter";
+            Name = "TwitterPublic";
             DefaultDuration = 60;
         }
 
-        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager)
+        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
             // Nagivate to the homepage for Twitter
-            driver.Navigate().GoToUrl("https://www.twitter.com");
+            driver.NavigateToUrl("https://www.twitter.com");
             driver.Wait(5);
 
             // Scroll through the infinite list

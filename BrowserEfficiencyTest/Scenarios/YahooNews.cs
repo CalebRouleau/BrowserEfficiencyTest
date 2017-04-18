@@ -37,18 +37,36 @@ namespace BrowserEfficiencyTest
     {
         public YahooNews()
         {
-            Name = "yahooNews";
+            Name = "YahooNews";
             DefaultDuration = 90;
         }
 
-        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager)
+        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
-            driver.Navigate().GoToUrl("http://www.yahoo.com");
+            driver.NavigateToUrl("http://www.yahoo.com");
             driver.Wait(5);
 
+            timer.ExtractPageLoadTime("Yahoo homepage");
+
+            IWebElement newsLink;
             // Go to the News section
-            // No reliable class or id for the news link, so get the news icon, then find its parent
-            IWebElement newsLink = driver.FindElementByClassName("IconNews").FindElement(By.XPath(".."));
+            // There are a number of different layouts currently.  Trying each one in order of observed probability.
+            try
+            {
+                newsLink = driver.FindElement(By.XPath("//a[@href='https://www.yahoo.com/news/']"));
+            }
+            catch
+            {
+                try
+                {
+                    newsLink = driver.FindElement(By.XPath("//a[@href='https://news.yahoo.com/']"));
+                }
+                catch
+                {
+                    // No reliable class or id for the news link, so get the news icon, then find its parent
+                    newsLink = driver.FindElementByClassName("IconNews").FindElement(By.XPath(".."));
+                }
+            }
             driver.ClickElement(newsLink);
 
             driver.Wait(5);
@@ -79,8 +97,10 @@ namespace BrowserEfficiencyTest
             driver.ScrollPage(1);
             driver.Wait(6);
 
+            timer.ExtractPageLoadTime("Yahoo article");
+
             // Then go back to the news homepage
-            driver.Navigate().Back();
+            driver.NavigateBack();
         }
     }
 }

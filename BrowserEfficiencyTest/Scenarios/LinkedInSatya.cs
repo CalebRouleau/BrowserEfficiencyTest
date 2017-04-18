@@ -37,13 +37,13 @@ namespace BrowserEfficiencyTest
     {
         public LinkedInSatya()
         {
-            Name = "linkedin";
+            Name = "LinkedInSatya";
         }
 
-        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager)
+        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
             // Nagivate to the public page for Satya Nadella
-            driver.Navigate().GoToUrl("https://www.linkedin.com/in/satya-nadella-3145136");
+            driver.NavigateToUrl("https://www.linkedin.com/in/satya-nadella-3145136");
             driver.Wait(10);
 
             // Scroll once; it's not very long

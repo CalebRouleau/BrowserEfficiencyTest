@@ -25,36 +25,41 @@
 //
 //--------------------------------------------------------------
 
-using System.Collections.Generic;
 using OpenQA.Selenium.Remote;
 using OpenQA.Selenium;
 
 namespace BrowserEfficiencyTest
 {
-    internal class OfficeLauncher : Scenario
+    internal class BrainPopAvalanches : Scenario
     {
-        public OfficeLauncher()
+        public BrainPopAvalanches()
         {
-            Name = "OfficeLauncher";
+            Name = "BrainPopAvalanches";
+            DefaultDuration = 60;
         }
 
         public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
-            UserInfo credentials = credentialManager.GetCredentials("office.com");
-
-            // Navigate
-            driver.NavigateToUrl("http://www.office.com");
+            // Go to BrainPop
+            driver.NavigateToUrl("http://www.brainpop.com");
             driver.Wait(5);
 
-            // Click on "Sign In" button
-            driver.ClickElement(driver.FindElementByLinkText("Sign in"));
-            driver.Wait(2);
-
-            // Log in
-            driver.TypeIntoField(driver.FindElementById("cred_userid_inputtext"), credentials.Username + Keys.Tab);
-            driver.Wait(8);
-            driver.TypeIntoField(driver.FindElementByName("passwd"), credentials.Password + Keys.Enter);
+            // Click on Science
+            driver.ClickElement(driver.FindElementById("category_0")
+                .FindElement(By.XPath("//*[@href='/science/']")));
+            driver.WaitForPageLoad();
             driver.Wait(5);
+
+            // Click on Earth Systems
+            driver.ClickElement(driver.FindElementByClassName("unit_list")
+                .FindElement(By.XPath("//*[@href='/science/earthsystem/']")));
+            driver.WaitForPageLoad();
+            driver.Wait(5);
+
+            // Click on Avalanches
+            driver.ClickElement(driver.FindElementByClassName("topic_list")
+                .FindElement(By.XPath("//*[@href='/science/earthsystem/avalanches/']")));
+            driver.WaitForPageLoad();
         }
     }
 }

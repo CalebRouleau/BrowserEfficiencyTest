@@ -35,29 +35,14 @@ namespace BrowserEfficiencyTest
     {
         public YoutubeWatchVideo()
         {
-            this.Name = "youtube";
+            this.Name = "YoutubeWatchVideo";
             // Leave the default time
         }
 
-        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager)
+        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
-            // Browse to Youtube if we're not there already
-            if (!driver.Url.Contains("youtube.com"))
-            {
-                driver.Navigate().GoToUrl("https://www.youtube.com/watch?v=l42U5Cwn1Y0");
-                Thread.Sleep(2000);
-            }
-
-            string movieId = "movie_player";
-            var player = driver.FindElementById(movieId);
-
-            // Play if it's paused
-            if (player.GetAttribute("class").Contains("paused-mode"))
-            {
-                player.Click();
-            }
-
-            Thread.Sleep(2000);
+            driver.NavigateToUrl("https://www.youtube.com/watch?v=l42U5Cwn1Y0");
+            driver.Wait(2);
         }
     }
 }

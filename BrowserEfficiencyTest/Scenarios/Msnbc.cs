@@ -36,12 +36,12 @@ namespace BrowserEfficiencyTest
     {
         public Msnbc()
         {
-            Name = "msnbc";
+            Name = "Msnbc";
         }
 
-        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager)
+        public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
-            driver.Navigate().GoToUrl("http://www.msnbc.com");
+            driver.NavigateToUrl("http://www.msnbc.com");
             driver.ScrollPage(5);
         }
     }

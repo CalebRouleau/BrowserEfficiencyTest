@@ -25,36 +25,37 @@
 //
 //--------------------------------------------------------------
 
-using System.Collections.Generic;
 using OpenQA.Selenium.Remote;
 using OpenQA.Selenium;
 
 namespace BrowserEfficiencyTest
 {
-    internal class OfficeLauncher : Scenario
+    internal class ColoradoStatesOfMatter : Scenario
     {
-        public OfficeLauncher()
+        public ColoradoStatesOfMatter()
         {
-            Name = "OfficeLauncher";
+            Name = "ColoradoStatesOfMatter";
+            DefaultDuration = 60;
         }
 
         public override void Run(RemoteWebDriver driver, string browser, CredentialManager credentialManager, ResponsivenessTimer timer)
         {
-            UserInfo credentials = credentialManager.GetCredentials("office.com");
-
-            // Navigate
-            driver.NavigateToUrl("http://www.office.com");
+            // Go to Colorado.edu
+            driver.NavigateToUrl("http://phet.colorado.edu");
             driver.Wait(5);
 
-            // Click on "Sign In" button
-            driver.ClickElement(driver.FindElementByLinkText("Sign in"));
-            driver.Wait(2);
-
-            // Log in
-            driver.TypeIntoField(driver.FindElementById("cred_userid_inputtext"), credentials.Username + Keys.Tab);
-            driver.Wait(8);
-            driver.TypeIntoField(driver.FindElementByName("passwd"), credentials.Password + Keys.Enter);
+            // Click on the big button
+            driver.ClickElement(driver.FindElementByClassName("play-with-sims-button"));
+            driver.WaitForPageLoad();
             driver.Wait(5);
+
+            // Go to the States of Matter sim
+            driver.ClickElement(driver.FindElementByXPath("//*[@href='/en/simulation/states-of-matter']"));
+            driver.WaitForPageLoad();
+            driver.Wait(5);
+
+            // Hit the play button
+            driver.ClickElement(driver.FindElementByXPath("//*[@href='/sims/html/states-of-matter/latest/states-of-matter_en.html']"));
         }
     }
 }
